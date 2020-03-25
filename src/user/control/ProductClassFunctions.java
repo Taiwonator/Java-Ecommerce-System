@@ -78,7 +78,7 @@ public class ProductClassFunctions {
 	public static void updateProduct(Product product) {
 		try {
 			  List<Product> products = getProductInfo();
-		      File file = new File("text/ProductDataTest.txt");
+		      File file = new File("text/ProductData.txt");
 		      FileOutputStream output_stream = new FileOutputStream(file);
 		      BufferedWriter writer = new BufferedWriter(new OutputStreamWriter(output_stream));
 		      for(int i = 0; i < products.size(); i++) {

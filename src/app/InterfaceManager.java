@@ -42,6 +42,9 @@ public class InterfaceManager {
 	private static AdminHome admin_home_window;
 	private static Object current_window;
 	
+	public static PaypalInterface PaypalInterface;
+	public static CardInterface CardInterface;
+	
 	private static JPanel product_window;
 
 	public enum State { IDLE, LOGIN, HOME, BROWSING, BASKET, SFL, PRODUCT, ADDPRODUCT }
@@ -359,7 +362,7 @@ public class InterfaceManager {
 		basket_button.setFont(new Font("Tahoma", Font.PLAIN, 12));
 		basket_button.setForeground(Color.WHITE);
 		basket_button.setIcon(new ImageIcon(Home.class.getResource("/res/Basket.png")));
-		basket_button.setBounds(719, 10, 72, 41);
+		basket_button.setBounds(719, 10, 100, 41);
 		basket_button.setBorderPainted(false); 
 		basket_button.setContentAreaFilled(false); 
 		basket_button.setOpaque(false);
@@ -439,6 +442,11 @@ public class InterfaceManager {
 			AdminHome.admin_home.frame.dispose();
 		}
 		InterfaceManager.user = null;
+	}
+	
+	public static void refreshBasket() {
+		basket_button.setText(Integer.toString(basket.getBasketSize()));
+		OpenBasket();
 	}
 	
 	public static void clearBasket() {
@@ -550,8 +558,26 @@ public class InterfaceManager {
 		}
 	}
 	
-	public static void carryOutPayment() {
-		
+	public static void carryOutPayment(String payment_type) {
+		String message = String.format("£" + "%.2f", basket.getTotal()) + " paid for using " + payment_type;
+		JOptionPane.showMessageDialog(Home.home.home_panel, message, "Payment Success", JOptionPane.INFORMATION_MESSAGE);
+		List<Product> basket_products = basket.getProducts();
+		for(int i = 0; i < basket_products.size(); i++) {
+			Product product = basket_products.get(i);
+			
+			ActivityLog log = new ActivityLog(user, product, basket.getBasket().get(product), "purchased", payment_type);
+			createActivityLog(log);
+			
+			product.setQuantityInStock(product.getQuantityInStock() - basket.getBasket().get(product));
+			ProductClassFunctions.updateProduct(product);
+		}
+		basket.clearBasket();
+		OpenBrowsing();
+	}
+	
+	public static void refreshPage() {
+		basket_button.setText(Integer.toString(basket.getBasketSize()));
+		OpenBrowsing();
 	}
 	
 	

@@ -144,7 +144,9 @@ public class ProductInterface {
 			sfl_button.addActionListener(new ActionListener() {
 				public void actionPerformed(ActionEvent arg0) {
 					int quantity = (int) combo_box.getSelectedItem();
-					if(quantity <= product.getQuantityInStock()) {
+					if(quantity > product.getQuantityInStock()) {
+						JOptionPane.showMessageDialog(product_panel, "We currently do not have the stock you are saving for later", "Low stock", JOptionPane.INFORMATION_MESSAGE);
+					} else {
 						String message = ("Are you want to add " + Integer.toString(quantity) + " " + product.getName() + " to your saved for later list?");
 						int dialog_result = JOptionPane.showConfirmDialog (null, message, "Confirm" , dialog_button);
 						if(dialog_result == JOptionPane.YES_OPTION){
@@ -152,14 +154,7 @@ public class ProductInterface {
 							JOptionPane.showMessageDialog(product_panel, Integer.toString(quantity) + " " + product.getName() + " added to save for later list", "Save for later", JOptionPane.INFORMATION_MESSAGE);
 						}
 						System.out.println(InterfaceManager.basket.getBasket());
-					} else {
-						String message = ("There are only " + Integer.toString(product.getQuantityInStock()) + " of " + product.getName() + " left in stock. Would you like to add the remaining " + Integer.toString(product.getQuantityInStock()) +  " to your save for later list?");
-						int dialog_result = JOptionPane.showConfirmDialog (null, message, "Warning" , dialog_button);
-						if(dialog_result == JOptionPane.YES_OPTION){
-							InterfaceManager.sfl_list.addProduct(product, product.getQuantityInStock());
-							JOptionPane.showMessageDialog(product_panel, Integer.toString(product.getQuantityInStock()) + " " + product.getName() + " added to save for later list", "Save for later", JOptionPane.INFORMATION_MESSAGE);
-						}
-					}
+					}					 
 				}
 			});
 			product_panel.add(sfl_button);
@@ -180,10 +175,14 @@ public class ProductInterface {
 						}
 						System.out.println(InterfaceManager.basket.getBasket());
 					} else {
-						String message = ("There are only " + Integer.toString(product.getQuantityInStock()) + " of " + product.getName() + " left in stock. Would you like to order the remaining " + Integer.toString(product.getQuantityInStock()) +  "?");
-						int dialog_result = JOptionPane.showConfirmDialog (null, message, "Warning" , dialog_button);
-						if(dialog_result == JOptionPane.YES_OPTION){
-							InterfaceManager.addToBasket(product, product.getQuantityInStock());
+						if(product.getQuantityInStock() != 0) {
+							String message = ("There are only " + Integer.toString(product.getQuantityInStock()) + " of " + product.getName() + " left in stock. Would you like to order the remaining " + Integer.toString(product.getQuantityInStock()) +  "?");
+							int dialog_result = JOptionPane.showConfirmDialog (null, message, "Warning" , dialog_button);
+							if(dialog_result == JOptionPane.YES_OPTION){
+								InterfaceManager.addToBasket(product, product.getQuantityInStock());
+							}
+						} else {
+							JOptionPane.showMessageDialog(product_panel, "Sorry, " + product.getName() + " is out of stock, we hope to restock soon!", "Out of stock", JOptionPane.INFORMATION_MESSAGE);
 						}
 					}
 				}

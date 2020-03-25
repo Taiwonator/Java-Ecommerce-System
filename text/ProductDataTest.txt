@@ -1,6 +1,6 @@
-112233, mouse, gaming, logitech, black, wireless, 25, 7.5, 9.5, 3
+112233, mouse, gaming, logitech, black, wireless, 20, 7.5, 9.5, 3
 123456, keyboard, gaming, corsair, black, wired, 1066, 30.0, 39.99, UK
-124455, keyboard, standard, advent, white, wired, 27, 3.5, 5.99, UK
+124455, keyboard, standard, advent, white, wired, 29, 3.5, 5.99, UK
 124566, mouse, standard, advent, grey, wired, 15, 2.5, 4.99, 2
 125567, keyboard, internet, logitech, black, wireless, 33, 25.99, 30.0, US
 221101, mouse, standard, logitech, black, wired, 22, 3.0, 6.99, 3

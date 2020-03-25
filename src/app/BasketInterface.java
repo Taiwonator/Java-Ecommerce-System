@@ -24,6 +24,7 @@ import javax.swing.border.LineBorder;
 import app.InterfaceManager.State;
 import user.control.Product;
 import user.control.ProductClassFunctions;
+import app.PaypalInterface;
 
 import java.awt.GridBagLayout;
 import java.awt.GridBagConstraints;
@@ -93,10 +94,22 @@ public class BasketInterface {
 		
 		JButton card_button = new JButton("Card payment");
 		card_button.setBounds(811, 257, 118, 34);
+		card_button.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent arg0) {
+				 cardPayment();
+			}
+			
+		});
 		basket_panel.add(card_button);
 		
 		JButton paypal_button = new JButton("Paypal");
 		paypal_button.setBounds(811, 302, 118, 34);
+		paypal_button.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent arg0) {
+				 paypalPayment();
+			}
+			
+		});
 		basket_panel.add(paypal_button);
 		
 		JLabel total_label = new JLabel("Total: \u00A3 " + String.format("%.2f", InterfaceManager.basket.getTotal()));
@@ -241,6 +254,51 @@ public class BasketInterface {
 		basket_product_panel.add(sfl_button, gbc_btnNewButton_3);
 		
 		return basket_product_panel;
+	}
+	
+	public static void cardPayment() {
+		if(checkStock()) {
+			if(!(InterfaceManager.CardInterface == null)) {
+				InterfaceManager.CardInterface.frame.dispose();
+			}
+			if(!(InterfaceManager.PaypalInterface == null)) {
+				InterfaceManager.PaypalInterface.frame.dispose();
+			}
+			InterfaceManager.CardInterface = new CardInterface();
+			InterfaceManager.CardInterface.frame.setVisible(true);
+		}
+	}
+	
+	public static void paypalPayment() {
+		if(checkStock()) {
+			if(!(InterfaceManager.PaypalInterface == null)) {
+				InterfaceManager.PaypalInterface.frame.dispose();
+			}
+			if(!(InterfaceManager.CardInterface == null)) {
+				InterfaceManager.CardInterface.frame.dispose();
+			}
+			InterfaceManager.PaypalInterface = new PaypalInterface();
+			InterfaceManager.PaypalInterface.frame.setVisible(true);
+		}
+	}
+	
+	public static boolean checkStock() {
+		boolean allow = true;
+		List<Product> basket_products = InterfaceManager.basket.getProducts();
+		for(int i = 0; i < basket_products.size(); i++) {
+			Product basket_product = basket_products.get(i);
+			if(InterfaceManager.basket.getBasket().get(basket_product) <= basket_product.getQuantityInStock()) {
+				
+			} else {
+				JOptionPane.showMessageDialog(Home.home.home_panel, "You are attempting to buy above our current stock, we have reduced your item quantity for " + basket_product.getName() + " from " + InterfaceManager.basket.getBasket().get(basket_product) + " to " + basket_product.getQuantityInStock(), "Item quantity changed", JOptionPane.INFORMATION_MESSAGE);
+				InterfaceManager.basket.changeProductAmount(basket_product, basket_product.getQuantityInStock());
+				allow = false;
+			}
+		}
+		if(!allow) {
+			InterfaceManager.refreshBasket();
+		}
+		return allow;
 	}
 	
 	

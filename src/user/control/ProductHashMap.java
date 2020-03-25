@@ -13,6 +13,10 @@ public class ProductHashMap {
 	    products = new HashMap<>();
 	}
 	
+	public void changeProductAmount(Product product, int value) {
+		products.put(product, value);
+	}
+	
 	public void addProduct(Product product) {
 		if(products.containsKey(product)) {
 			products.put(product, products.get(product) + 1);

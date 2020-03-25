@@ -26,7 +26,6 @@ public class PaypalInterface {
 	private JLabel error_message;
 	
 	public static void main(String[] args) {
-		;
 		EventQueue.invokeLater(new Runnable() {
 			public void run() {
 				try {
@@ -56,7 +55,6 @@ public class PaypalInterface {
 		
 		frame = new JFrame();
 		frame.setBounds(100, 100, 600, 300);
-		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		frame.getContentPane().setLayout(null);
 		frame.setResizable(false);
 		Toolkit tk = Toolkit.getDefaultToolkit();
@@ -124,6 +122,8 @@ public class PaypalInterface {
 		if (email != null) {
 			if(pat.matcher(email).matches()) {
 				error_message.setText("");
+				InterfaceManager.carryOutPayment("PayPal");
+				frame.dispose();
 			} else {
 				error_message.setText("Enter a valid email address");
 			}
